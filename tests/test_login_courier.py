@@ -2,15 +2,18 @@ import pytest
 import data
 from helpers import generate_random_courier_payload
 from methods.courier_methods import CourierMethods
+import allure
 
 class TestLoginCourier:
-    def test_create_courier(self, new_courier):
+    @allure.title('Test successful courier login')
+    def test_login_courier(self, new_courier):
         courier_api = CourierMethods()
         courier_data = new_courier
         status_code, response = courier_api.post_login(courier_data)
         assert status_code == 200
         assert response['id'] != None
 
+    @allure.title('Test prohibited to login without required fields')
     @pytest.mark.parametrize(
             'requierd_field,expeted_code',
             [
@@ -22,9 +25,10 @@ class TestLoginCourier:
         courier_api = CourierMethods()
         courier_data = new_courier
         del courier_data[requierd_field]
-        status_code, response = courier_api.post_login(courier_data)
+        status_code, _ = courier_api.post_login(courier_data)
         assert status_code == expeted_code
 
+    @allure.title('Test prohibited to login with wrong login or password')
     @pytest.mark.parametrize(
             'login_field',
             ['login', 'password']
@@ -38,6 +42,7 @@ class TestLoginCourier:
         assert status_code == 404
         assert response['message'] == data.LOGIN_COURIER_NOT_FOUND_ERROR
 
+    @allure.title('Test prohibited to login for non-existing user')
     def test_login_not_existiong_user(self):
         courier_api = CourierMethods()
         random_courier = generate_random_courier_payload()

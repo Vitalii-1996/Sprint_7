@@ -2,9 +2,13 @@ from methods.order_methods import OrderMethods
 import pytest
 import data
 import copy
+import allure
 
 
 class TestCreateOrder:
+    @allure.title("Test successful orders creation with different colors")
+    @allure.description("Test creates orders with different color and without color."
+    "Response status code and presence of order track id are checked.")
     @pytest.mark.parametrize(
         'colors',
         [

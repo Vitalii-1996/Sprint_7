@@ -1,5 +1,6 @@
 import random
 import string
+import allure
 
 
 def generate_random_string(length):
@@ -7,6 +8,7 @@ def generate_random_string(length):
     random_string = ''.join(random.choice(letters) for i in range(length))
     return random_string
 
+@allure.step('generate random login, password and first name')
 def generate_random_courier_payload():
     login = generate_random_string(10)
     password = generate_random_string(10)
